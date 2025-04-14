@@ -13,10 +13,8 @@ public class DbService {
           try{
                System.out.println("Connecting to database...");
                Class.forName("org.postgresql.Driver");
-               System.out.println("ulanmoqda");
                return DriverManager.getConnection(DB_URL,USER,PASS);
           } catch (Exception e) {
-               System.out.println("XAto");
                return null;
           }
      }
@@ -24,7 +22,7 @@ public class DbService {
 
      public Result addUser(String name,String surname, Result result) throws SQLException {
 
-          String query = "{select add_users(?,?)}";
+          String query = "{call add_users(?,?,?,?)}";
           CallableStatement pS = getConnection().prepareCall(query);
 
           pS.setString(1,name);
