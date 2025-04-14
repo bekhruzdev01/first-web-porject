@@ -2,9 +2,7 @@ package com.example.demo.DBService;
 
 import com.example.demo.model.Result;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DbService {
      private static final String DB_URL = "jdbc:postgresql://localhost:5432/first-db";
@@ -13,14 +11,34 @@ public class DbService {
 
      public  Connection getConnection() throws SQLException {
           try{
+               System.out.println("Connecting to database...");
+               Class.forName("org.postgresql.Driver");
+               System.out.println("ulanmoqda");
                return DriverManager.getConnection(DB_URL,USER,PASS);
           } catch (Exception e) {
+               System.out.println("XAto");
                return null;
           }
      }
 
 
-     public Result addUser(){
-          getConnection().prepareStatement("select * from users");
+     public Result addUser(String name,String surname, Result result) throws SQLException {
+
+          String query = "{select add_users(?,?)}";
+          CallableStatement pS = getConnection().prepareCall(query);
+
+          pS.setString(1,name);
+          pS.setString(2,surname);
+
+          pS.registerOutParameter(3, Types.VARCHAR);
+          pS.registerOutParameter(4, Types.BOOLEAN);
+
+          pS.execute();
+
+          result.setMessage(pS.getString(3));
+          result.setSuccess(pS.getBoolean(4));
+
+          return result;
+
      }
 }
