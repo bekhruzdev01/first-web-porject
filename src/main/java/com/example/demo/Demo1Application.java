@@ -1,12 +1,15 @@
 package com.example.demo;
 
 import com.example.demo.DBService.DbService;
+import com.example.demo.model.DUser;
 import com.example.demo.model.Result;
 import lombok.SneakyThrows;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 @SpringBootApplication
@@ -39,6 +42,10 @@ public class Demo1Application {
                     break;
                 case 2:
                     System.out.println("View");
+                    for (DUser user : dbService.getUser()) {
+                        System.out.println("ID: " + user.getId() + " Name: " + user.getName() + " Surname: " + user.getSurname());
+                    }
+                    break;
                 case 3:
                     System.out.println("Edit");
                     System.out.print("Id: ");
@@ -49,6 +56,11 @@ public class Demo1Application {
                     String EditSurname = scanner.next();
 
                     System.out.println(dbService.editUser(id, EditName, EditSurname, result).getMessage());
+                    break;
+                case 4:
+                    System.out.println("Delete");
+                    System.out.print("Id: ");
+                    System.out.println(dbService.deleteUser(scanner.nextInt()));
                     break;
             }
         }
