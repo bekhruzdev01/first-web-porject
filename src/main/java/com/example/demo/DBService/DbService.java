@@ -39,4 +39,24 @@ public class DbService {
           return result;
 
      }
+
+     public Result editUser(Integer id,String name,String surname, Result result) throws SQLException {
+          String query = "{call edit_user(?,?,?,?,?)}";
+          CallableStatement pS = getConnection().prepareCall(query);
+
+          pS.setInt(1,id);
+          pS.setString(2,name);
+          pS.setString(3,surname);
+
+          pS.registerOutParameter(4, Types.VARCHAR);
+          pS.registerOutParameter(5, Types.BOOLEAN);
+
+          pS.execute();
+          result.setMessage(pS.getString(4));
+          result.setSuccess(pS.getBoolean(5));
+
+          return result;
+     }
+
+
 }
